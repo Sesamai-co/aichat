@@ -2,12 +2,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useChatStore } from '@/lib/store';
 import { sendMessageToOpenRouter } from '@/lib/openrouter';
-import { Mic, Send, StopCircle, Menu, Download, Trash2, PlusCircle, Copy, FileJson, FileText } from 'lucide-react';
+import { Mic, Send, StopCircle, Menu, Download, PlusCircle, FileJson, FileText } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 import Sidebar from './Sidebar';
 
 export default function ChatInterface() {
-  const { messages, addMessage, clearChat, mode, setMode, selectedModels, apiKey, setApiKey } = useChatStore();
+  // Added 'params' to the selector so we can read max_tokens
+  const { messages, addMessage, clearChat, mode, setMode, selectedModels, apiKey, setApiKey, params } = useChatStore();
   const [input, setInput] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -63,8 +64,21 @@ export default function ChatInterface() {
     setIsGenerating(true);
     abortControllerRef.current = new AbortController();
 
+    // --- DYNAMIC LENGTH INSTRUCTION ---
+    // 1 Token ~= 0.75 words. We give a 10% safety buffer.
+    const approxWordLimit = Math.floor(params.max_tokens * 0.7);
+    const systemInstruction = {
+        role: "system",
+        content: `IMPORTANT: You have a strict output limit of approximately ${approxWordLimit} words. You must plan your response to be concise and finish completely before reaching this limit. Do not cut off mid-sentence.`
+    };
+
     try {
+        // Build History
         let currentHistory = messages.slice(-10).map(m => ({ role: m.role, content: m.content }));
+        
+        // Inject the System Warning at the very top
+        currentHistory.unshift(systemInstruction as any);
+
         currentHistory.push({ role: 'user', content: userMsg.content });
 
         if (mode === 'roundtable') {
@@ -168,12 +182,8 @@ export default function ChatInterface() {
         <div className="h-16 border-b border-gray-800 flex items-center justify-between px-6 bg-gray-900 shadow-sm z-10">
             <div className="flex items-center gap-4">
                 <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 hover:bg-gray-800 rounded-lg text-gray-400 hover:text-white transition-colors"><Menu size={20} /></button>
-                
-                {/* --- TITLE RESTORED HERE --- */}
                 <h1 className="font-bold text-xl tracking-tight hidden sm:block mr-2">OpenStudio</h1>
-
                 <div className="h-6 w-px bg-gray-700 mx-2 hidden sm:block"></div>
-                
                 <button onClick={handleNewChat} title="New Chat" className="flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800 px-3 py-1.5 rounded-lg transition-all">
                     <PlusCircle size={16} /> <span className="hidden md:inline">New Chat</span>
                 </button>
