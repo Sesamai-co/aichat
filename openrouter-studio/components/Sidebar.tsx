@@ -37,6 +37,13 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose:
     load();
   }, []);
 
+  // Safety: If repetition_penalty is somehow negative (from old saves), reset it to 1.0
+  useEffect(() => {
+    if (params.repetition_penalty < 0) {
+        updateParams({ repetition_penalty: 1 });
+    }
+  }, [params.repetition_penalty, updateParams]);
+
   const sortedModels = [...availableModels].sort((a, b) => {
     const aFav = favorites.includes(a.id);
     const bFav = favorites.includes(b.id);
@@ -168,13 +175,12 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose:
             {showParams && (
                 <div className="p-4 space-y-6 bg-gray-900/30">
                     {Object.entries(params).map(([key, val]) => {
-                        // Logic to determine ranges
                         let min = 0;
                         let max = 1;
                         let step = 0.01;
 
                         if (key === 'repetition_penalty') {
-                             min = 0.1; // Strict minimum above zero
+                             min = 0.01; // CHANGED: Hard minimum
                              max = 2.0;
                              step = 0.01;
                         } else if (key.includes('penalty')) {
@@ -200,7 +206,11 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose:
                                 key={key} 
                                 label={key.replace('_', ' ')} 
                                 value={val} 
-                                onChange={(v: number) => updateParams({ [key]: v })} 
+                                onChange={(v: number) => {
+                                    // SAFETY GUARD: Enforce positive value for repetition_penalty
+                                    if (key === 'repetition_penalty' && v <= 0) return;
+                                    updateParams({ [key]: v });
+                                }} 
                                 min={min}
                                 max={max}
                                 step={step}
