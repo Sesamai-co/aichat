@@ -10,4 +10,5 @@ A "Pro" interface for interacting with OpenRouter models. Features include:
 [Click here to try OpenStudio](https://your-app-name.vercel.app)
 
 <img width="1901" height="807" alt="image" src="https://github.com/user-attachments/assets/8ce3c205-48a0-45d0-90ec-17f7005d8b23" />
-<img width="1920" height="4266" alt="image" src="https://github.com/user-attachments/assets/ead85f25-79ba-4016-864a-119efd835325" />
+<img width="1920" height="1435" alt="image" src="https://github.com/user-attachments/assets/97438928-e02d-40f5-bb43-0d6098f0b49e" />
+
