@@ -9,12 +9,12 @@ const PARAM_DESCRIPTIONS: Record<string, string> = {
     max_tokens: "Max length of response.\n• Low: Short answers.\n• High: Long essays.",
     top_p: "Nucleus Sampling.\n• Low: Safe words only.\n• High: Diverse vocabulary.",
     top_k: "Vocabulary Limit.\n• Low: Top 10 words.\n• High: Huge pool of words.",
-    frequency_penalty: "Anti-Repetition.\n• Increase if AI repeats itself.",
-    presence_penalty: "Topic Switcher.\n• Increase to force new topics."
+    frequency_penalty: "Anti-Repetition (Text).\n• Positive: Reduces repeating words.\n• Negative: Encourages repeating words.",
+    presence_penalty: "Topic Switcher.\n• Positive: Forces new topics.\n• Negative: Stays on current topic.",
+    repetition_penalty: "Strict Repetition Control.\n• 1.0: Neutral (No penalty).\n• > 1.0: Strictly prevents repeating exact phrases.\n• DO NOT set below 0."
 };
 
 export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  // Added apiKey and setApiKey to the store selector
   const { selectedModels, toggleModel, params, updateParams, favorites, toggleFavorite, mode, apiKey, setApiKey } = useChatStore();
   const [availableModels, setAvailableModels] = useState<any[]>([]);
   const [search, setSearch] = useState('');
@@ -64,7 +64,7 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose:
 
       <div className="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-thin scrollbar-thumb-gray-700">
         
-        {/* --- API KEY SECTION (New) --- */}
+        {/* --- API KEY SECTION --- */}
         <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700/50">
             <div className="flex items-center gap-2 mb-2 text-sm font-semibold text-blue-400">
                 <Key size={16} />
@@ -167,15 +167,47 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose:
             </button>
             {showParams && (
                 <div className="p-4 space-y-6 bg-gray-900/30">
-                    {Object.entries(params).map(([key, val]) => (
-                        <ParamSlider key={key} label={key.replace('_', ' ')} value={val} 
-                            onChange={(v: number) => updateParams({ [key]: v })} 
-                            min={key.includes('penalty') ? -2 : 0} 
-                            max={key === 'max_tokens' ? 8000 : (key === 'top_k' ? 100 : 2)} 
-                            step={key === 'max_tokens' ? 100 : 0.1} 
-                            desc={PARAM_DESCRIPTIONS[key]} 
-                        />
-                    ))}
+                    {Object.entries(params).map(([key, val]) => {
+                        // Logic to determine ranges
+                        let min = 0;
+                        let max = 1;
+                        let step = 0.01;
+
+                        if (key === 'repetition_penalty') {
+                             min = 0.1; // Strict minimum above zero
+                             max = 2.0;
+                             step = 0.01;
+                        } else if (key.includes('penalty')) {
+                             min = -2;
+                             max = 2;
+                             step = 0.1;
+                        } else if (key === 'max_tokens') {
+                             min = 100;
+                             max = 8000;
+                             step = 100;
+                        } else if (key === 'top_k') {
+                             min = 0;
+                             max = 100;
+                             step = 1;
+                        } else if (key === 'temperature') {
+                             min = 0;
+                             max = 2;
+                             step = 0.1;
+                        }
+
+                        return (
+                            <ParamSlider 
+                                key={key} 
+                                label={key.replace('_', ' ')} 
+                                value={val} 
+                                onChange={(v: number) => updateParams({ [key]: v })} 
+                                min={min}
+                                max={max}
+                                step={step}
+                                desc={PARAM_DESCRIPTIONS[key] || "No description available."} 
+                            />
+                        );
+                    })}
                 </div>
             )}
         </div>
