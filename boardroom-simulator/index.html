@@ -10,21 +10,15 @@
     
     <style>
         :root {
-            /* --- NEW PALETTE: CHARCOAL & GOLD --- */
-            --bg-dark: #121212; /* Deep neutral black/grey */
-            /* Neutral slate gradient instead of blue */
-            --bg-gradient: radial-gradient(circle at 10% 20%, #2a2a2a 0%, #121212 90%);
-            /* Warmer, darker glass */
-            --glass-surface: rgba(35, 35, 35, 0.8);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            /* Richer, slightly warmer gold */
+            /* --- CHARCOAL & GOLD PALETTE --- */
+            --bg-dark: #121212; 
+            --bg-gradient: radial-gradient(circle at 50% 0%, #2a2a2a 0%, #121212 80%);
+            --glass-surface: rgba(30, 30, 30, 0.95);
+            --glass-border: rgba(255, 255, 255, 0.1);
             --gold-accent: #eab308; 
-            --gold-glow: rgba(234, 179, 8, 0.2);
-            /* Crisp white text */
+            --gold-glow: rgba(234, 179, 8, 0.15);
             --text-primary: #ffffff;
-            /* Neutral grey secondary text (no blue tint) */
             --text-secondary: #a3a3a3;
-            
             --success: #10b981;
             --danger: #ef4444;
         }
@@ -42,317 +36,117 @@
 
         /* --- HEADER --- */
         header {
-            background: rgba(18, 18, 18, 0.95); /* Match new dark bg */
-            backdrop-filter: blur(10px);
+            background: rgba(18, 18, 18, 0.98);
             border-bottom: 1px solid var(--glass-border);
             padding: 0 2rem;
-            height: 80px;
+            height: 70px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 10;
+            z-index: 100;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .brand-logo {
-            font-size: 1.8rem;
-            filter: drop-shadow(0 0 10px var(--gold-glow));
-        }
-
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand-logo { font-size: 1.5rem; filter: drop-shadow(0 0 8px var(--gold-glow)); }
         .brand-text h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.25rem;
-            margin: 0;
-            letter-spacing: 0.5px;
-            /* Neutral silver gradient */
-            background: linear-gradient(45deg, #ffffff, #b0b0b0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 1.1rem; margin: 0; letter-spacing: 0.5px;
+            background: linear-gradient(45deg, #fff, #bbb);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        
-        .brand-text p {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+        .brand-text p { font-size: 0.65rem; color: var(--text-secondary); margin: 0; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* Controls Area */
         .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            background: rgba(255,255,255,0.05);
-            padding: 8px 16px;
-            border-radius: 50px;
-            border: 1px solid var(--glass-border);
+            display: flex; align-items: center; gap: 15px;
+            background: rgba(255,255,255,0.03); padding: 6px 12px; border-radius: 40px; border: 1px solid var(--glass-border);
         }
 
-        /* Mode Toggle */
-        .mode-toggle {
-            display: flex;
-            background: rgba(0,0,0,0.2);
-            border-radius: 20px;
-            padding: 4px;
-            cursor: pointer;
-        }
-
-        .mode-option {
-            padding: 6px 16px;
-            border-radius: 16px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            color: var(--text-secondary);
-        }
-
-        .mode-option.active {
-            background: var(--text-primary);
-            color: var(--bg-dark);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-        }
+        .mode-toggle { display: flex; background: rgba(0,0,0,0.3); border-radius: 20px; padding: 3px; cursor: pointer; }
+        .mode-option { padding: 5px 12px; border-radius: 16px; font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); transition: 0.2s; }
+        .mode-option.active { background: var(--text-primary); color: var(--bg-dark); }
 
         .api-input {
-            background: transparent;
-            border: none;
-            color: var(--text-primary);
-            font-family: monospace;
-            width: 120px;
-            outline: none;
-            font-size: 0.9rem;
-            transition: width 0.3s;
+            background: transparent; border: none; color: var(--text-primary); font-family: monospace;
+            width: 100px; outline: none; font-size: 0.8rem; transition: width 0.3s;
         }
-        .api-input:focus { width: 250px; }
+        .api-input:focus { width: 220px; }
         .api-input::placeholder { color: var(--text-secondary); opacity: 0.5; }
 
-        /* --- MAIN LAYOUT --- */
+        /* --- MAIN --- */
         main {
-            flex: 1;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            padding: 2rem;
-            max-width: 1600px;
-            margin: 0 auto;
-            width: 100%;
-            box-sizing: border-box;
+            flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; padding: 2rem;
+            max-width: 1600px; margin: 0 auto; width: 100%; box-sizing: border-box;
         }
 
-        /* Cards */
         .glass-panel {
             background: var(--glass-surface);
-            backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-shadow: 0 20px 40px -20px rgba(0,0,0,0.8);
-            overflow: hidden;
+            border-radius: 12px; padding: 2rem;
+            display: flex; flex-direction: column; position: relative;
+            box-shadow: 0 20px 50px -20px rgba(0,0,0,0.7);
         }
 
-        /* Section Headers */
         h2 {
-            font-family: 'Playfair Display', serif;
-            color: var(--gold-accent);
-            font-size: 1.1rem;
-            margin: 0 0 1.5rem 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            font-family: 'Playfair Display', serif; color: var(--gold-accent); font-size: 1rem; margin: 0 0 1.5rem 0;
+            display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; letter-spacing: 1px;
         }
 
         .refresh-btn {
-            background: transparent;
-            border: 1px solid var(--glass-border);
-            color: var(--text-secondary);
-            border-radius: 50%;
-            width: 32px; height: 32px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex; align-items: center; justify-content center;
+            background: transparent; border: 1px solid var(--glass-border); color: var(--text-secondary);
+            border-radius: 50%; width: 28px; height: 28px; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center;
         }
         .refresh-btn:hover { border-color: var(--gold-accent); color: var(--gold-accent); transform: rotate(180deg); }
 
-        /* Scenario Box */
+        /* Scenario */
         .scenario-box {
-            background: linear-gradient(90deg, rgba(234, 179, 8, 0.05) 0%, rgba(0,0,0,0) 100%);
-            border-left: 3px solid var(--gold-accent);
-            padding: 1.5rem;
-            border-radius: 0 8px 8px 0;
-            margin-bottom: 2rem;
+            background: linear-gradient(90deg, rgba(234, 179, 8, 0.08) 0%, rgba(0,0,0,0) 100%);
+            border-left: 3px solid var(--gold-accent); padding: 1.2rem; border-radius: 0 6px 6px 0; margin-bottom: 1.5rem;
         }
-        
-        .scenario-text {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            font-weight: 300;
-        }
+        .scenario-text { font-size: 1rem; line-height: 1.5; font-weight: 300; }
 
-        /* Transcript */
+        /* Transcript - FORCED HIGH CONTRAST */
         .transcript-wrapper {
-            flex: 1;
-            background: rgba(0,0,0,0.4); /* Darker background for contrast */
-            border-radius: 8px;
-            padding: 1.5rem;
-            font-family: 'Inter', monospace;
-            line-height: 1.7;
-            overflow-y: auto;
-            border: 1px solid var(--glass-border);
-            margin-bottom: 2rem;
-            color: var(--text-secondary);
+            flex: 1; background: #000000; border-radius: 8px; padding: 1.5rem;
+            font-family: 'Inter', monospace; line-height: 1.6; overflow-y: auto;
+            border: 1px solid var(--glass-border); margin-bottom: 2rem;
+            color: #ffffff; /* FORCE WHITE TEXT */
         }
+        .transcript-final { color: #ffffff; font-weight: 400; }
+        .transcript-interim { color: #888888; font-style: italic; }
+
+        /* Controls */
+        .action-bar { display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; }
+        .btn { padding: 1rem; border-radius: 6px; font-weight: 600; letter-spacing: 0.5px; cursor: pointer; border: none; text-transform: uppercase; font-size: 0.8rem; transition: 0.2s; }
         
-        .transcript-final { color: var(--text-primary); }
-        .transcript-interim { color: var(--text-secondary); opacity: 0.6; }
-
-        /* Action Bar */
-        .action-bar {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 1rem;
-            border-radius: 8px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-        }
-
-        .btn-record {
-            background: var(--text-primary);
-            color: var(--bg-dark);
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-        .btn-record:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,255,255,0.1); }
+        .btn-record { background: var(--text-primary); color: var(--bg-dark); display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-record:hover { background: #e2e2e2; }
+        .btn-record.recording { background: var(--danger); color: white; animation: pulse 2s infinite; }
         
-        .btn-record.recording {
-            background: var(--danger);
-            color: white;
-            animation: pulse-red 2s infinite;
-        }
+        .btn-analyze { background: transparent; border: 1px solid var(--glass-border); color: var(--text-secondary); cursor: not-allowed; }
+        .btn-analyze.ready { background: var(--gold-accent); color: var(--bg-dark); border-color: var(--gold-accent); cursor: pointer; font-weight: 700; }
 
-        .btn-analyze {
-            background: transparent;
-            border: 1px solid var(--glass-border);
-            color: var(--text-secondary);
-            cursor: not-allowed;
-        }
-        
-        .btn-analyze.ready {
-            background: var(--gold-accent);
-            color: var(--bg-dark);
-            border-color: var(--gold-accent);
-            cursor: pointer;
-            box-shadow: 0 0 20px var(--gold-glow);
-        }
-
-        /* --- DASHBOARD (RIGHT) --- */
-        .dashboard-empty {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-secondary);
-            opacity: 0.4;
-            text-align: center;
-        }
-
+        /* Dashboard */
+        .dashboard-empty { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-secondary); opacity: 0.4; text-align: center; }
         .dashboard-content { display: none; height: 100%; flex-direction: column; }
         .dashboard-content.visible { display: flex; }
 
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
+        .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+        .metric-card { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 1.5rem; text-align: center; border: 1px solid var(--glass-border); }
+        .metric-val { font-size: 3rem; font-family: 'Playfair Display', serif; font-weight: 700; line-height: 1; margin-bottom: 0.5rem; color: var(--text-primary); }
+        .metric-label { font-size: 0.65rem; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 1.5px; }
 
-        .metric-card {
-            background: rgba(0,0,0,0.2);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-            border: 1px solid var(--glass-border);
-        }
+        .feedback-section { flex: 1; overflow-y: auto; }
+        .feedback-label { color: var(--gold-accent); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem; display: block; }
+        .rewrite-box { background: rgba(16, 185, 129, 0.08); border-left: 2px solid var(--success); padding: 1rem; font-style: italic; color: #a7f3d0; line-height: 1.5; margin-top: 5px; }
 
-        .metric-val {
-            font-size: 3.5rem;
-            font-family: 'Playfair Display', serif;
-            font-weight: 700;
-            line-height: 1;
-            margin-bottom: 0.5rem;
-        }
-        .metric-label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 1.5px; }
-
-        .feedback-section { flex: 1; overflow-y: auto; padding-right: 10px; }
-        
-        .feedback-item { margin-bottom: 2rem; }
-        .feedback-label { 
-            color: var(--gold-accent); 
-            font-size: 0.7rem; 
-            font-weight: 700; 
-            text-transform: uppercase; 
-            letter-spacing: 1px;
-            margin-bottom: 0.8rem; 
-            display: block; 
-        }
-        
-        .rewrite-box {
-            background: rgba(16, 185, 129, 0.05);
-            border-left: 3px solid var(--success);
-            padding: 1.5rem;
-            font-style: italic;
-            color: #a7f3d0; /* Lighter green for better contrast on dark */
-            line-height: 1.6;
-        }
-
-        /* Status & Loading */
-        .status-pill {
-            position: absolute;
-            top: 2rem; right: 2rem;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            background: rgba(0,0,0,0.3);
-            padding: 4px 10px;
-            border-radius: 20px;
-        }
-
-        .loader {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-        }
+        .status-pill { position: absolute; top: 1.5rem; right: 2rem; font-size: 0.7rem; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 20px; }
+        .loader { display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
         .loader.visible { display: flex; }
-        
-        .spinner {
-            width: 40px; height: 40px;
-            border: 3px solid rgba(255,255,255,0.1);
-            border-radius: 50%;
-            border-top-color: var(--gold-accent);
-            animation: spin 1s ease-in-out infinite;
-            margin-bottom: 1rem;
-        }
+        .spinner { width: 30px; height: 30px; border: 2px solid rgba(255,255,255,0.1); border-radius: 50%; border-top-color: var(--gold-accent); animation: spin 1s infinite; margin-bottom: 1rem; }
 
-        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-
     </style>
 </head>
 <body>
@@ -365,81 +159,69 @@
                 <p>Executive Communication Coach</p>
             </div>
         </div>
-
         <div class="header-controls">
-            <div class="mode-toggle" id="mode-switcher">
+            <div class="mode-toggle">
                 <div class="mode-option active" id="mode-demo" onclick="setMode('demo')">DEMO</div>
                 <div class="mode-option" id="mode-live" onclick="setMode('live')">LIVE</div>
             </div>
-
-            <div id="api-wrapper" style="display: none; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 15px; margin-left: 10px;">
-                <input type="password" id="api-key" class="api-input" placeholder="Enter OpenAI Key..." oninput="saveKey()">
+            <div id="api-wrapper" style="display: none; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 10px; margin-left: 10px;">
+                <input type="password" id="api-key" class="api-input" placeholder="OpenAI Key..." oninput="saveKey()">
             </div>
         </div>
     </header>
 
     <main>
         <div class="glass-panel">
-            <h2>
-                Scenario Context
-                <button class="refresh-btn" onclick="generateScenario()" title="New Crisis">↻</button>
-            </h2>
-
+            <h2>Scenario Context <button class="refresh-btn" onclick="generateScenario()">↻</button></h2>
             <div class="scenario-box">
-                <div class="scenario-text" id="scenario-text">
-                    Loading critical operational update...
-                </div>
+                <div class="scenario-text" id="scenario-text">Initializing Crisis...</div>
             </div>
 
             <div class="transcript-wrapper" id="transcript">
-                <span class="transcript-interim">// Your executive summary will appear here. Press Record to begin.</span>
+                <span style="color: #666;">// Press Record to begin speaking...</span>
             </div>
 
             <div class="action-bar">
                 <button id="btn-record" class="btn btn-record" onclick="toggleMic()">
                     <span id="mic-icon">●</span> <span id="mic-text">START RECORDING</span>
                 </button>
-                <button id="btn-analyze" class="btn btn-analyze" onclick="analyze()" disabled>
-                    ANALYZE PITCH
-                </button>
+                <button id="btn-analyze" class="btn btn-analyze" onclick="analyze()" disabled>ANALYZE</button>
             </div>
-
             <div class="status-pill" id="status-text">System Ready</div>
         </div>
 
         <div class="glass-panel">
-            <h2>CFO Assessment</h2>
+            <h2>Executive Feedback</h2> 
 
             <div id="state-empty" class="dashboard-empty">
-                <div style="font-size: 4rem; margin-bottom: 1.5rem; opacity: 0.5;">Waiting...</div>
-                <p style="font-size: 1.1rem;">Record your update to begin the<br>executive analysis simulation.</p>
+                <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;">📊</div>
+                <p>Awaiting transcript analysis...</p>
             </div>
 
             <div id="state-loading" class="loader">
                 <div class="spinner"></div>
-                <p style="color: var(--gold-accent); letter-spacing: 1px; font-weight: 600;">ANALYZING EXECUTIVE PRESENCE...</p>
+                <p style="color: var(--gold-accent); font-size: 0.8rem; letter-spacing: 1px;">EVALUATING...</p>
             </div>
 
             <div id="state-dash" class="dashboard-content">
                 <div class="metrics-grid">
                     <div class="metric-card">
-                        <div class="metric-val" id="score-val" style="color: var(--text-primary);">--</div>
-                        <div class="metric-label">Brevity Score</div>
+                        <div class="metric-val" id="score-val">--</div>
+                        <div class="metric-label">Brevity</div>
                     </div>
                     <div class="metric-card">
                         <div class="metric-val" id="grade-val">--</div>
-                        <div class="metric-label">Strategic Grade</div>
+                        <div class="metric-label">Impact</div>
                     </div>
                 </div>
 
                 <div class="feedback-section">
-                    <div class="feedback-item">
-                        <span class="feedback-label">Ruthless Feedback</span>
-                        <div id="feedback-text" style="line-height: 1.6; color: var(--text-primary); font-size: 1.1rem;">--</div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <span class="feedback-label">Critique</span>
+                        <div id="feedback-text" style="line-height: 1.6; color: var(--text-primary);">--</div>
                     </div>
-                    
-                    <div class="feedback-item">
-                        <span class="feedback-label">The "Bottom Line Up Front" Rewrite</span>
+                    <div>
+                        <span class="feedback-label">Executive Rewrite (BLUF)</span>
                         <div id="rewrite-text" class="rewrite-box">--</div>
                     </div>
                 </div>
@@ -448,60 +230,204 @@
     </main>
 
     <script>
-        // --- APP STATE ---
+        // --- APP LOGIC ---
         const App = {
-            mode: 'demo', // 'demo' or 'live'
+            mode: 'demo',
             apiKey: localStorage.getItem('boardroom_api_key') || '',
             isRecording: false,
             recognition: null,
-            scenario: ""
+            scenario: "",
+            finalTranscript: "",
+            interimTranscript: "" 
         };
 
         const SCENARIOS = [
-            "The migration to the new payment provider failed, resulting in 4 hours of downtime for EU customers.",
-            "We are projecting a $50k overage on cloud infrastructure costs due to an unoptimized autoscaling event.",
-            "The Lead Engineer on the 'Project Alpha' critical path has resigned effectively immediately.",
-            "A security audit revealed a vulnerability in our login flow. We need to force a password reset for all users."
+            "The database migration failed, causing 4 hours of downtime for EU customers.",
+            "We are projecting a $50k overage on cloud costs due to autoscaling errors.",
+            "The Lead Engineer on Project Alpha has resigned effectively immediately.",
+            "A security audit revealed a vulnerability in our login flow."
         ];
 
-        // --- INIT ---
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. Force Scenario Load
             generateScenario();
-            
-            // 2. Setup Speech
             setupSpeech();
-            
-            // 3. UI State Check
             if(App.apiKey && App.apiKey.startsWith('sk-')) {
                 document.getElementById('api-key').value = App.apiKey;
-                setMode('live'); 
-            } else {
-                setMode('demo');
+                setMode('live');
             }
         });
 
-        // --- CORE FUNCTIONS ---
+        // --- SPEECH RECOGNITION ---
+        function setupSpeech() {
+            if(!('webkitSpeechRecognition' in window)) {
+                document.getElementById('transcript').innerHTML = "<span style='color:var(--danger)'>⚠️ Browser not supported. Use Chrome Desktop.</span>";
+                return;
+            }
 
+            App.recognition = new webkitSpeechRecognition();
+            App.recognition.continuous = true; 
+            App.recognition.interimResults = true; 
+            App.recognition.lang = 'en-US';
+
+            App.recognition.onstart = () => {
+                updateStatus("Microphone Active");
+            };
+
+            App.recognition.onresult = (event) => {
+                let interim = "";
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        App.finalTranscript += event.results[i][0].transcript;
+                    } else {
+                        interim += event.results[i][0].transcript;
+                    }
+                }
+                
+                // FORCE UPDATE DOM
+                const display = `<span class="transcript-final">${App.finalTranscript}</span> <span class="transcript-interim">${interim}</span>`;
+                document.getElementById('transcript').innerHTML = display;
+                
+                // Auto-scroll to bottom
+                const container = document.getElementById('transcript');
+                container.scrollTop = container.scrollHeight;
+
+                // Enable button
+                if((App.finalTranscript + interim).length > 5) {
+                    const btn = document.getElementById('btn-analyze');
+                    btn.disabled = false;
+                    btn.classList.add('ready');
+                }
+            };
+
+            // FIX: Auto-Restart Logic
+            App.recognition.onend = () => {
+                if (App.isRecording) {
+                    console.log("Browser stopped mic. Restarting...");
+                    try {
+                        App.recognition.start();
+                    } catch(e) { stopMicUI(); }
+                } else {
+                    updateStatus("Recording Stopped");
+                }
+            };
+
+            App.recognition.onerror = (e) => {
+                console.error("Mic Error:", e.error);
+                if (e.error === 'not-allowed') {
+                    updateStatus("❌ Mic Permission Denied");
+                    stopMicUI();
+                }
+            };
+        }
+
+        function toggleMic() {
+            if(!App.isRecording) {
+                // START
+                App.finalTranscript = "";
+                App.interimTranscript = "";
+                document.getElementById('transcript').innerHTML = "";
+                
+                try {
+                    App.recognition.start();
+                    App.isRecording = true;
+                    
+                    const btn = document.getElementById('btn-record');
+                    btn.classList.add('recording');
+                    document.getElementById('mic-text').innerText = "STOP";
+                    document.getElementById('mic-icon').innerText = "■";
+                    
+                    const analyzeBtn = document.getElementById('btn-analyze');
+                    analyzeBtn.disabled = true;
+                    analyzeBtn.classList.remove('ready');
+                } catch(e) {
+                    alert("Could not start mic. Check permissions.");
+                }
+
+            } else {
+                // STOP
+                App.isRecording = false; 
+                App.recognition.stop();
+                stopMicUI();
+            }
+        }
+
+        function stopMicUI() {
+            App.isRecording = false;
+            const btn = document.getElementById('btn-record');
+            btn.classList.remove('recording');
+            document.getElementById('mic-text').innerText = "START RECORDING";
+            document.getElementById('mic-icon').innerText = "●";
+        }
+
+        // --- ANALYSIS ---
+        async function analyze() {
+            if(App.isRecording) toggleMic(); 
+
+            const text = document.getElementById('transcript').innerText;
+            if(text.length < 5 || text.includes("// Press Record")) {
+                alert("Please speak first.");
+                return;
+            }
+
+            document.getElementById('state-empty').style.display = 'none';
+            document.getElementById('state-dash').classList.remove('visible');
+            document.getElementById('state-loading').classList.add('visible');
+            updateStatus("Analyzing...");
+
+            try {
+                let data;
+                if(App.mode === 'live' && App.apiKey.length > 10) {
+                    data = await callOpenAI(text);
+                } else {
+                    await new Promise(r => setTimeout(r, 1500));
+                    data = getMockData();
+                }
+                renderDashboard(data);
+                updateStatus("Complete");
+
+            } catch(e) {
+                alert("Error: " + e.message);
+                document.getElementById('state-loading').classList.remove('visible');
+                document.getElementById('state-empty').style.display = 'flex';
+            }
+        }
+
+        async function callOpenAI(text) {
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${App.apiKey}`
+                },
+                body: JSON.stringify({
+                    model: "gpt-4o-mini",
+                    messages: [
+                        {role: "system", content: "You are a ruthless CFO. Output valid JSON: {brevity_score: number, grade: string, feedback: string, rewrite: string}."},
+                        {role: "user", content: `Context: ${App.scenario}. Transcript: ${text}`}
+                    ],
+                    response_format: { type: "json_object" }
+                })
+            });
+            if(!response.ok) throw new Error("OpenAI API Failure");
+            const json = await response.json();
+            return JSON.parse(json.choices[0].message.content);
+        }
+
+        function getMockData() {
+            return {
+                brevity_score: 45,
+                grade: "C-",
+                feedback: "(DEMO) You buried the lead. I don't care about the process, I care about the timeline impact.",
+                rewrite: "Project is delayed by 2 weeks. Mitigation plan attached."
+            };
+        }
+
+        // --- UTILS ---
         function setMode(mode) {
             App.mode = mode;
-            
-            // UI Toggles
-            const demoBtn = document.getElementById('mode-demo');
-            const liveBtn = document.getElementById('mode-live');
-            const apiWrapper = document.getElementById('api-wrapper');
-
-            if(mode === 'demo') {
-                demoBtn.classList.add('active');
-                liveBtn.classList.remove('active');
-                apiWrapper.style.display = 'none';
-                updateStatus("Demo Mode Active (Mock Data)");
-            } else {
-                demoBtn.classList.remove('active');
-                liveBtn.classList.add('active');
-                apiWrapper.style.display = 'block';
-                updateStatus("Live Mode (Requires OpenAI Key)");
-            }
+            document.getElementById('mode-demo').classList.toggle('active', mode === 'demo');
+            document.getElementById('mode-live').classList.toggle('active', mode === 'live');
+            document.getElementById('api-wrapper').style.display = mode === 'live' ? 'block' : 'none';
         }
 
         function saveKey() {
@@ -514,186 +440,12 @@
             const random = SCENARIOS[Math.floor(Math.random() * SCENARIOS.length)];
             App.scenario = random;
             document.getElementById('scenario-text').innerText = random;
-            
-            // Reset Dashboard
             document.getElementById('state-dash').classList.remove('visible');
             document.getElementById('state-empty').style.display = 'flex';
         }
 
         function updateStatus(msg) {
             document.getElementById('status-text').innerText = msg;
-        }
-
-        // --- SPEECH LOGIC ---
-        function setupSpeech() {
-            if(!('webkitSpeechRecognition' in window)) {
-                document.getElementById('transcript').innerHTML = "<span style='color:var(--danger)'>⚠️ Browser not supported. Use Chrome Desktop.</span>";
-                document.getElementById('btn-record').disabled = true;
-                return;
-            }
-
-            App.recognition = new webkitSpeechRecognition();
-            App.recognition.continuous = true;
-            App.recognition.interimResults = true;
-
-            App.recognition.onstart = () => {
-                updateStatus("Microphone Listening...");
-            };
-
-            App.recognition.onresult = (event) => {
-                let final = "";
-                let interim = "";
-
-                for(let i=0; i < event.results.length; ++i) {
-                    if(event.results[i].isFinal) final += event.results[i][0].transcript;
-                    else interim += event.results[i][0].transcript;
-                }
-
-                document.getElementById('transcript').innerHTML = 
-                    `<span class="transcript-final">${final}</span> <span class="transcript-interim">${interim}</span>`;
-
-                // Enable Analyze Button if text exists
-                const fullText = final + interim;
-                if(fullText.length > 5) {
-                    const btn = document.getElementById('btn-analyze');
-                    btn.disabled = false;
-                    btn.classList.add('ready');
-                }
-            };
-
-            App.recognition.onerror = (e) => {
-                console.error(e);
-                if(e.error !== 'no-speech') {
-                    updateStatus("Mic Error: " + e.error);
-                stopMicUI();
-                }
-            };
-        }
-
-        function toggleMic() {
-            if(!App.isRecording) {
-                // Start
-                App.recognition.start();
-                App.isRecording = true;
-                document.getElementById('transcript').innerHTML = ""; // Clear old
-                
-                // Button UI
-                const btn = document.getElementById('btn-record');
-                btn.classList.add('recording');
-                document.getElementById('mic-text').innerText = "STOP RECORDING";
-                document.getElementById('mic-icon').innerText = "■";
-                
-                // Reset Analyze button until they speak
-                const analyzeBtn = document.getElementById('btn-analyze');
-                analyzeBtn.disabled = true;
-                analyzeBtn.classList.remove('ready');
-
-            } else {
-                // Stop
-                App.recognition.stop();
-                stopMicUI();
-            }
-        }
-
-        function stopMicUI() {
-            App.isRecording = false;
-            const btn = document.getElementById('btn-record');
-            btn.classList.remove('recording');
-            document.getElementById('mic-text').innerText = "START RECORDING";
-            document.getElementById('mic-icon').innerText = "●";
-            updateStatus("Recording paused.");
-        }
-
-        // --- ANALYSIS LOGIC ---
-        async function analyze() {
-            if(App.isRecording) toggleMic(); // Auto-stop
-
-            // 1. Grab Text
-            const text = document.getElementById('transcript').innerText;
-             if(text.length < 5 || text.includes("// Your executive summary")) {
-                alert("Please record an update first.");
-                return;
-            }
-
-            // 2. UI Loading State
-            document.getElementById('state-empty').style.display = 'none';
-            document.getElementById('state-dash').classList.remove('visible');
-            document.getElementById('state-loading').classList.add('visible');
-            updateStatus("Consulting AI CFO...");
-
-            try {
-                let data;
-                if(App.mode === 'live' && App.apiKey.length > 10) {
-                    data = await callOpenAI(text);
-                } else {
-                    // Demo Fallback
-                    await new Promise(r => setTimeout(r, 2000)); // Fake delay for effect
-                    data = getMockData();
-                }
-                renderDashboard(data);
-                updateStatus("Analysis Complete.");
-
-            } catch(e) {
-                alert("Error: " + e.message);
-                // Reset UI
-                document.getElementById('state-loading').classList.remove('visible');
-                document.getElementById('state-empty').style.display = 'flex';
-                updateStatus("Analysis Failed.");
-            }
-        }
-
-        // --- API & DATA ---
-        async function callOpenAI(text) {
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${App.apiKey}`
-                },
-                body: JSON.stringify({
-                    model: "gpt-4o-mini",
-                    messages: [
-                        {role: "system", content: "You are a ruthless CFO. Analyze this technical update. Return strictly VALID JSON with these keys: {brevity_score: number (0-100), grade: string (A-F), feedback: string (1 ruthless sentence), rewrite: string (BLUF version)}."},
-                        {role: "user", content: `Context: ${App.scenario}. Transcript: ${text}`}
-                    ],
-                    response_format: { type: "json_object" }
-                })
-            });
-
-            if(!response.ok) {
-                const errData = await response.json();
-                throw new Error("OpenAI Error: " + (errData.error?.message || response.statusText));
-            }
-
-            const json = await response.json();
-            return JSON.parse(json.choices[0].message.content);
-        }
-
-        function getMockData() {
-             return {
-                brevity_score: 55,
-                grade: "C",
-                feedback: "(DEMO) You buried the lead deep in technical jargon; I need budget impact, not Kubernetes version numbers.",
-                rewrite: "The payment migration failed, causing 4 hours of EU downtime. We have rolled back and are investigating root cause. Revenue impact is est. $20k."
-            };
-        }
-
-        // --- RENDERING ---
-        function renderDashboard(data) {
-            document.getElementById('state-loading').classList.remove('visible');
-            document.getElementById('state-dash').classList.add('visible');
-
-            document.getElementById('score-val').innerText = data.brevity_score;
-            const gradeEl = document.getElementById('grade-val');
-            gradeEl.innerText = data.grade;
-            
-            // Color Grading
-            if(data.grade.includes('A') || data.grade.includes('B')) gradeEl.style.color = 'var(--success)';
-            else if(data.grade.includes('F') || data.grade.includes('D')) gradeEl.style.color = 'var(--danger)';
-            else gradeEl.style.color = 'var(--gold-accent)';
-
-            document.getElementById('feedback-text').innerText = data.feedback;
-            document.getElementById('rewrite-text').innerText = data.rewrite;
         }
     </script>
 </body>
