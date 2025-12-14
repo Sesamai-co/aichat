@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Boardroom Simulator | Executive Presence Coach</title>
+    <style>
+        /* --- CSS: The "Executive" Theme --- */
+        :root {
+            --navy: #0a192f;
+            --navy-light: #172a45;
+            --gold: #ffc107;
+            --gold-dim: #bfa15f;
+            --white: #e6f1ff;
+            --slate: #8892b0;
+            --danger: #ff5555;
+            --success: #64ffda;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--navy);
+            color: var(--slate);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--navy-light);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--navy-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .brand span { color: var(--gold); }
+
+        .header-controls button {
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .header-controls button:hover {
+            background: var(--gold);
+            color: var(--navy);
+        }
+
+        /* Main Grid */
+        main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--navy-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(136, 146, 176, 0.1);
+            position: relative;
+        }
+
+        h2 { color: var(--white); margin-top: 0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 20px;}
+
+        /* Left Panel: Scenario & Input */
+        .scenario-box {
+            background: rgba(0,0,0,0.2);
+            padding: 1rem;
+            border-left: 3px solid var(--gold);
+            margin-bottom: 2rem;
+            color: var(--white);
+            min-height: 60px;
+        }
+
+        .scenario-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .btn-small {
+            background: var(--navy);
+            border: 1px solid var(--slate);
+            color: var(--slate);
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        
+        .btn-small:hover { border-color: var(--white); color: var(--white); }
+
+        .transcript-area {
+            flex: 1;
+            background: #020c1b;
+            border: 1px solid #233554;
+            border-radius: 4px;
+            padding: 1rem;
+            color: var(--white);
+            font-family: 'Courier New', monospace;
+            overflow-y: auto;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .controls-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .mic-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background: var(--danger);
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 0 0 0 rgba(255, 85, 85, 0.7);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mic-btn.recording {
+            animation: pulse-red 1.5s infinite;
+            background: #cc0000;
+        }
+
+        @keyframes pulse-red {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 85, 85, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(255, 85, 85, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 85, 85, 0); }
+        }
+
+        /* Right Panel: The Dashboard */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .metric-box {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .metric-val { font-size: 2.5rem; font-weight: 800; color: var(--white); }
+        .metric-label { font-size: 0.8rem; color: var(--slate); text-transform: uppercase; }
+        
+        .grade-a { color: var(--success); }
+        .grade-c { color: var(--gold); }
+        .grade-f { color: var(--danger); }
+
+        .feedback-section {
+            margin-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 15px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .feedback-item { margin-bottom: 15px; }
+        .feedback-label { color: var(--gold); font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; display: block; }
+        .feedback-text { color: var(--slate); font-size: 0.95rem; }
+
+        .rewrite-box {
+            background: rgba(100, 255, 218, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: var(--navy-light);
+            padding: 2rem;
+            border-radius: 8px;
+            width: 500px;
+            border: 1px solid var(--gold);
+        }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; color: var(--white); margin-bottom: 5px; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background: #020c1b;
+            border: 1px solid var(--slate);
+            color: white;
+            border-radius: 4px;
+            box-sizing: border-box; /* Fixes padding width issues */
+        }
+        
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">
+            <span>//</span> BOARDROOM SIMULATOR
+        </div>
+        <div class="header-controls">
+            <button onclick="openSettings()">⚙️ Settings & API</button>
+        </div>
+    </header>
+
+    <main>
+        <div class="card">
+            <h2>1. The Context</h2>
+            
+            <div class="scenario-controls">
+                <button class="btn-small" onclick="generateCrisis()">🎲 Random Crisis</button>
+                <button class="btn-small" onclick="editScenario()">✏️ Custom Scenario</button>
+            </div>
+            <div id="scenario-text" class="scenario-box">
+                Loading scenario...
+            </div>
+
+            <h2>2. The Pitch</h2>
+            <div id="transcript" class="transcript-area">
+                <span style="color: #445;">Transcript will appear here... press the mic to start.</span>
+            </div>
+            
+            <div class="controls-area">
+                <button id="mic-btn" class="mic-btn" onclick="toggleRecording()">🎤</button>
+                <div id="status-text" style="font-size: 0.9rem; color: var(--gold);">Ready</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>3. The CFO Verdict</h2>
+            
+            <div id="dashboard" class="hidden">
+                <div class="dashboard-grid">
+                    <div class="metric-box">
+                        <div class="metric-val" id="score-val">--</div>
+                        <div class="metric-label">Brevity Score</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-val" id="grade-val">--</div>
+                        <div class="metric-label">Strategic Grade</div>
+                    </div>
+                </div>
+
+                <div class="feedback-section">
+                    <div class="feedback-item">
+                        <span class="feedback-label">RUTHLESS FEEDBACK</span>
+                        <div id="feedback-text" class="feedback-text">--</div>
+                    </div>
+
+                    <div class="feedback-item">
+                        <span class="feedback-label">WEAK LANGUAGE DETECTED</span>
+                        <div id="weak-words" class="feedback-text" style="color: var(--danger);">--</div>
+                    </div>
+
+                    <div class="feedback-item">
+                        <span class="feedback-label">EXECUTIVE REWRITE (BLUF)</span>
+                        <div id="rewrite-text" class="rewrite-box">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="loader" class="hidden" style="text-align: center; padding-top: 50px;">
+                <div style="font-size: 3rem;">⚙️</div>
+                <p style="color: var(--gold);">Analyzing semantic density...</p>
+            </div>
+            
+            <div id="placeholder-result" style="text-align: center; opacity: 0.5; padding-top: 50px;">
+                Waiting for input...
+            </div>
+        </div>
+    </main>
+
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <h2 style="border:none;">Configuration</h2>
+            
+            <div class="form-group">
+                <label>Mode</label>
+                <select id="app-mode">
+                    <option value="demo">Demo Mode (Mock Data - No Key Needed)</option>
+                    <option value="live">Live API Mode</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>AI Model</label>
+                <select id="ai-model">
+                    <option value="gpt-4o-mini">OpenAI (GPT-4o-mini)</option>
+                    <option value="claude-3">Anthropic (Claude 3.5 Sonnet)</option>
+                </select>
+                <small style="color: var(--slate); font-size: 0.7rem;">*Claude requires a backend proxy for CORS. OpenAI works with Raw Fetch for demos.</small>
+            </div>
+
+            <div class="form-group">
+                <label>API Key</label>
+                <input type="password" id="api-key" placeholder="sk-...">
+            </div>
+
+            <div class="form-group">
+                <label>Custom Scenario (Optional)</label>
+                <textarea id="custom-scenario-input" rows="3" placeholder="Enter your specific difficult situation here..."></textarea>
+            </div>
+
+            <button class="header-controls" style="background: var(--gold); color: var(--navy); border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px;" onclick="saveSettings()">Save & Close</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Configuration ---
+        const CONFIG = {
+            mode: 'demo', // 'demo' or 'live'
+            model: 'gpt-4o-mini',
+            apiKey: '',
+            scenario: "The core database migration failed last night, causing a 4-hour outage for European customers. The CEO wants to know why and when it's fixed."
+        };
+
+        // --- Random Scenarios ---
+        const SCENARIOS = [
+            "Budget Overrun: The cloud infrastructure bill is 40% over forecast due to an unoptimized autoscaling group.",
+            "Missed Deadline: The Q3 mobile app release will be delayed by 3 weeks due to a critical security vulnerability found in audit.",
+            "Vendor Failure: Our primary payment gateway API is down, and we are losing $10k/minute in transaction volume.",
+            "Talent Risk: The Lead Architect just resigned to join a competitor, taking 50% of the project knowledge with them."
+        ];
+
+        // --- DOM Elements ---
+        const micBtn = document.getElementById('mic-btn');
+        const statusText = document.getElementById('status-text');
+        const transcriptEl = document.getElementById('transcript');
+        const dashboard = document.getElementById('dashboard');
+        const loader = document.getElementById('loader');
+        const placeholder = document.getElementById('placeholder-result');
+        const scenarioText = document.getElementById('scenario-text');
+
+        // --- Speech Recognition Setup ---
+        let recognition;
+        let isRecording = false;
+        let finalTranscript = "";
+
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+
+            recognition.onresult = (event) => {
+                let interimTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript;
+                    } else {
+                        interimTranscript += event.results[i][0].transcript;
+                    }
+                }
+                transcriptEl.innerHTML = finalTranscript + '<i style="color: #8892b0;">' + interimTranscript + '</i>';
+            };
+
+            recognition.onerror = (event) => {
+                statusText.innerText = "Error: " + event.error;
+            };
+        } else {
+            transcriptEl.innerHTML = "⚠️ Browser not supported. Please use Chrome or Edge.";
+        }
+
+        // --- Core Functions ---
+
+        function init() {
+            generateCrisis();
+        }
+
+        function generateCrisis() {
+            const random = SCENARIOS[Math.floor(Math.random() * SCENARIOS.length)];
+            CONFIG.scenario = random;
+            scenarioText.innerText = random;
+        }
+
+        function editScenario() {
+            const custom = prompt("Enter your custom scenario:", CONFIG.scenario);
+            if(custom) {
+                CONFIG.scenario = custom;
+                scenarioText.innerText = custom;
+            }
+        }
+
+        function openSettings() {
+            document.getElementById('settings-modal').style.display = 'flex';
+        }
+
+        function saveSettings() {
+            CONFIG.mode = document.getElementById('app-mode').value;
+            CONFIG.model = document.getElementById('ai-model').value;
+            CONFIG.apiKey = document.getElementById('api-key').value;
+            
+            const customInput = document.getElementById('custom-scenario-input').value;
+            if(customInput.trim() !== "") {
+                CONFIG.scenario = customInput;
+                scenarioText.innerText = customInput;
+            }
+
+            document.getElementById('settings-modal').style.display = 'none';
+            alert(`Settings Saved! Mode: ${CONFIG.mode.toUpperCase()}`);
+        }
+
+        function toggleRecording() {
+            if (!recognition) return alert("Speech API not supported in this browser.");
+
+            if (isRecording) {
+                // STOP
+                recognition.stop();
+                isRecording = false;
+                micBtn.classList.remove('recording');
+                statusText.innerText = "Processing...";
+                analyzePitch(finalTranscript);
+            } else {
+                // START
+                finalTranscript = "";
+                transcriptEl.innerHTML = "";
+                recognition.start();
+                isRecording = true;
+                micBtn.classList.add('recording');
+                statusText.innerText = "Listening (Speak clearly)...";
+                
+                // Dashboard Reset
+                dashboard.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+            }
+        }
+
+        // --- The Brain: Analysis Logic ---
+        
+        async function analyzePitch(text) {
+            // UI State
+            placeholder.classList.add('hidden');
+            loader.classList.remove('hidden');
+
+            // Payload Construction
+            let resultData = null;
+
+            if (CONFIG.mode === 'demo') {
+                // SIMULATED DELAY FOR EFFECT
+                await new Promise(r => setTimeout(r, 2000));
+                resultData = getMockData();
+            } else {
+                // LIVE API CALL
+                try {
+                    if(CONFIG.model === 'gpt-4o-mini') {
+                        resultData = await callOpenAI(text);
+                    } else {
+                        alert("Note: Calling Anthropic directly from browser usually fails due to CORS. Using Mock Data for safety.");
+                        await new Promise(r => setTimeout(r, 1500));
+                        resultData = getMockData(); // Fallback for stability
+                    }
+                } catch (e) {
+                    alert("API Error: " + e.message + ". Reverting to demo data.");
+                    resultData = getMockData();
+                }
+            }
+
+            renderDashboard(resultData);
+        }
+
+        // --- API Integrations ---
+
+        async function callOpenAI(transcript) {
+            if (!CONFIG.apiKey) throw new Error("No API Key provided");
+
+            const systemPrompt = `
+                You are a ruthless Fortune 500 CFO. Analyze the following executive update. 
+                Return strictly VALID JSON. 
+                Scenario Context: "${CONFIG.scenario}"
+                
+                JSON Structure:
+                {
+                    "brevity_score": (integer 0-100),
+                    "grade": (String "A", "B", "C", "D", "F"),
+                    "feedback": (String, ruthless one sentence critique),
+                    "weak_words": (String, comma separated list of hedging words used),
+                    "rewrite": (String, the perfect BLUF version)
+                }
+            `;
+
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${CONFIG.apiKey}`
+                },
+                body: JSON.stringify({
+                    model: "gpt-4o-mini",
+                    messages: [
+                        {role: "system", content: systemPrompt},
+                        {role: "user", content: transcript}
+                    ],
+                    response_format: { type: "json_object" }
+                })
+            });
+
+            const data = await response.json();
+            return JSON.parse(data.choices[0].message.content);
+        }
+
+        function getMockData() {
+            // Hardcoded "Wow" response for the portfolio demo
+            return {
+                brevity_score: 42,
+                grade: "D+",
+                feedback: "You buried the lead. I don't care about the process, I care about the timeline impact.",
+                weak_words: "basically, i think, um, hopefully, try",
+                rewrite: "The project is delayed by 3 weeks due to security findings. We have deployed a fix and will be back on track by Monday."
+            };
+        }
+
+        // --- Rendering ---
+
+        function renderDashboard(data) {
+            loader.classList.add('hidden');
+            dashboard.classList.remove('hidden');
+
+            // Animate Numbers
+            document.getElementById('score-val').innerText = data.brevity_score;
+            
+            const gradeEl = document.getElementById('grade-val');
+            gradeEl.innerText = data.grade;
+            gradeEl.className = `metric-val grade-${data.grade.toLowerCase().charAt(0)}`;
+
+            document.getElementById('feedback-text').innerText = data.feedback;
+            document.getElementById('weak-words').innerText = data.weak_words;
+            document.getElementById('rewrite-text').innerText = data.rewrite;
+        }
+
+        // Start
+        init();
+
+    </script>
+</body>
+</html>
