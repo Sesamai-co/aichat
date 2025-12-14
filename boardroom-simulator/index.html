@@ -3,587 +3,318 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Boardroom Simulator | Executive Presence Coach</title>
+    <title>The Boardroom Simulator v2</title>
     <style>
-        /* --- CSS: The "Executive" Theme --- */
         :root {
-            --navy: #0a192f;
-            --navy-light: #172a45;
-            --gold: #ffc107;
-            --gold-dim: #bfa15f;
-            --white: #e6f1ff;
-            --slate: #8892b0;
-            --danger: #ff5555;
-            --success: #64ffda;
+            --navy: #0a192f; --navy-light: #172a45; --gold: #ffc107; --white: #e6f1ff; 
+            --slate: #8892b0; --danger: #ff5555; --success: #64ffda;
         }
-
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--navy);
-            color: var(--slate);
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-        }
-
+        body { font-family: 'Segoe UI', sans-serif; background: var(--navy); color: var(--slate); margin: 0; display: flex; flex-direction: column; height: 100vh; }
+        
         /* Header */
-        header {
-            background-color: var(--navy-light);
-            padding: 1rem 2rem;
-            border-bottom: 1px solid var(--navy-light);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-        }
+        header { padding: 1rem 2rem; background: var(--navy-light); border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
+        .brand { color: var(--white); font-weight: bold; font-size: 1.2rem; }
+        .api-input-group { display: flex; gap: 10px; align-items: center; }
+        #api-key { background: #0b1421; border: 1px solid var(--slate); color: white; padding: 5px 10px; border-radius: 4px; width: 200px; }
 
-        .brand {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--white);
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        /* Main Layout */
+        main { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; padding: 2rem; height: 100%; box-sizing: border-box; }
         
-        .brand span { color: var(--gold); }
+        .card { background: var(--navy-light); border-radius: 8px; padding: 1.5rem; display: flex; flex-direction: column; border: 1px solid #333; }
+        h2 { color: var(--white); border-bottom: 1px solid #333; padding-bottom: 10px; margin-top: 0; }
 
-        .header-controls button {
-            background: transparent;
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            border-radius: 4px;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
+        /* Scenario */
+        .scenario-box { background: rgba(255, 255, 255, 0.05); padding: 10px; margin-bottom: 20px; border-left: 3px solid var(--gold); color: var(--white); }
 
-        .header-controls button:hover {
-            background: var(--gold);
-            color: var(--navy);
-        }
+        /* Transcript */
+        .transcript-area { flex: 1; background: #000; padding: 1rem; border: 1px solid #333; font-family: monospace; color: var(--success); overflow-y: auto; margin-bottom: 20px; font-size: 1rem; }
 
-        /* Main Grid */
-        main {
-            flex: 1;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            padding: 2rem;
-            max-width: 1600px;
-            margin: 0 auto;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        /* Cards */
-        .card {
-            background-color: var(--navy-light);
-            border-radius: 8px;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid rgba(136, 146, 176, 0.1);
-            position: relative;
-        }
-
-        h2 { color: var(--white); margin-top: 0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 20px;}
-
-        /* Left Panel: Scenario & Input */
-        .scenario-box {
-            background: rgba(0,0,0,0.2);
-            padding: 1rem;
-            border-left: 3px solid var(--gold);
-            margin-bottom: 2rem;
-            color: var(--white);
-            min-height: 60px;
-        }
-
-        .scenario-controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 1rem;
-        }
-
-        .btn-small {
-            background: var(--navy);
-            border: 1px solid var(--slate);
-            color: var(--slate);
-            padding: 4px 10px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            border-radius: 4px;
-        }
+        /* Controls - The New UX */
+        .control-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         
-        .btn-small:hover { border-color: var(--white); color: var(--white); }
-
-        .transcript-area {
-            flex: 1;
-            background: #020c1b;
-            border: 1px solid #233554;
-            border-radius: 4px;
-            padding: 1rem;
-            color: var(--white);
-            font-family: 'Courier New', monospace;
-            overflow-y: auto;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-        }
-
-        .controls-area {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .mic-btn {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: none;
-            background: var(--danger);
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: 0 0 0 0 rgba(255, 85, 85, 0.7);
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .mic-btn.recording {
-            animation: pulse-red 1.5s infinite;
-            background: #cc0000;
-        }
-
-        @keyframes pulse-red {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 85, 85, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(255, 85, 85, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 85, 85, 0); }
-        }
-
-        /* Right Panel: The Dashboard */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .metric-box {
-            background: rgba(255,255,255,0.05);
-            padding: 15px;
-            border-radius: 6px;
-            text-align: center;
-        }
-
-        .metric-val { font-size: 2.5rem; font-weight: 800; color: var(--white); }
-        .metric-label { font-size: 0.8rem; color: var(--slate); text-transform: uppercase; }
+        button { border: none; padding: 15px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.2s; color: var(--navy); }
         
-        .grade-a { color: var(--success); }
-        .grade-c { color: var(--gold); }
-        .grade-f { color: var(--danger); }
-
-        .feedback-section {
-            margin-top: 10px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 15px;
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .feedback-item { margin-bottom: 15px; }
-        .feedback-label { color: var(--gold); font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; display: block; }
-        .feedback-text { color: var(--slate); font-size: 0.95rem; }
-
-        .rewrite-box {
-            background: rgba(100, 255, 218, 0.1);
-            border: 1px solid var(--success);
-            color: var(--success);
-            padding: 10px;
-            border-radius: 4px;
-            margin-top: 5px;
-            font-style: italic;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
+        #btn-record { background: var(--slate); color: var(--navy); }
+        #btn-record.recording { background: var(--danger); color: white; animation: pulse 1.5s infinite; }
         
-        .modal-content {
-            background: var(--navy-light);
-            padding: 2rem;
-            border-radius: 8px;
-            width: 500px;
-            border: 1px solid var(--gold);
-        }
+        #btn-analyze { background: var(--gold); opacity: 0.5; pointer-events: none; }
+        #btn-analyze.ready { opacity: 1; pointer-events: all; }
 
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; color: var(--white); margin-bottom: 5px; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            background: #020c1b;
-            border: 1px solid var(--slate);
-            color: white;
-            border-radius: 4px;
-            box-sizing: border-box; /* Fixes padding width issues */
-        }
-        
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+
+        /* Status Bar */
+        #status-bar { margin-top: 15px; text-align: center; color: var(--white); font-weight: bold; min-height: 24px; }
+
+        /* Dashboard (Right Side) */
+        .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .metric { background: rgba(255,255,255,0.05); padding: 20px; text-align: center; border-radius: 6px; }
+        .metric-val { font-size: 2.5rem; font-weight: bold; color: var(--white); }
+        .metric-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        .feedback-box { margin-bottom: 15px; }
+        .feedback-label { color: var(--gold); font-size: 0.8rem; font-weight: bold; display: block; margin-bottom: 5px; }
+        .rewrite { background: rgba(100, 255, 218, 0.1); border: 1px solid var(--success); color: var(--success); padding: 10px; margin-top: 5px; }
+
         .hidden { display: none; }
+        .error-msg { color: var(--danger); border: 1px solid var(--danger); padding: 10px; margin-top: 10px; background: rgba(255,0,0,0.1); }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="brand">
-            <span>//</span> BOARDROOM SIMULATOR
-        </div>
-        <div class="header-controls">
-            <button onclick="openSettings()">⚙️ Settings & API</button>
+        <div class="brand">BOARDROOM SIMULATOR v2</div>
+        <div class="api-input-group">
+            <span style="font-size: 0.8rem; color: var(--slate);">OPENAI API KEY:</span>
+            <input type="password" id="api-key" placeholder="sk-..." onchange="saveKey()">
         </div>
     </header>
 
     <main>
         <div class="card">
-            <h2>1. The Context</h2>
-            
-            <div class="scenario-controls">
-                <button class="btn-small" onclick="generateCrisis()">🎲 Random Crisis</button>
-                <button class="btn-small" onclick="editScenario()">✏️ Custom Scenario</button>
-            </div>
-            <div id="scenario-text" class="scenario-box">
-                Loading scenario...
+            <h2>The Situation</h2>
+            <div class="scenario-box">
+                <strong>Scenario:</strong> <span id="scenario-text">Critical Database Outage causing 404 errors for 20% of users. CEO is asking for an update.</span>
+                <br><br>
+                <small style="color: var(--slate); cursor: pointer; text-decoration: underline;" onclick="newScenario()">🔄 Randomize</small>
             </div>
 
-            <h2>2. The Pitch</h2>
-            <div id="transcript" class="transcript-area">
-                <span style="color: #445;">Transcript will appear here... press the mic to start.</span>
+            <div class="transcript-area" id="transcript">
+                Press RECORD to start speaking...
             </div>
-            
-            <div class="controls-area">
-                <button id="mic-btn" class="mic-btn" onclick="toggleRecording()">🎤</button>
-                <div id="status-text" style="font-size: 0.9rem; color: var(--gold);">Ready</div>
+
+            <div class="control-bar">
+                <button id="btn-record" onclick="toggleMic()">● START RECORDING</button>
+                <button id="btn-analyze" onclick="analyze()" disabled>➤ STOP & ANALYZE</button>
             </div>
+            <div id="status-bar">Ready</div>
         </div>
 
         <div class="card">
-            <h2>3. The CFO Verdict</h2>
+            <h2>Executive Feedback</h2>
             
-            <div id="dashboard" class="hidden">
-                <div class="dashboard-grid">
-                    <div class="metric-box">
-                        <div class="metric-val" id="score-val">--</div>
-                        <div class="metric-label">Brevity Score</div>
-                    </div>
-                    <div class="metric-box">
-                        <div class="metric-val" id="grade-val">--</div>
-                        <div class="metric-label">Strategic Grade</div>
-                    </div>
-                </div>
-
-                <div class="feedback-section">
-                    <div class="feedback-item">
-                        <span class="feedback-label">RUTHLESS FEEDBACK</span>
-                        <div id="feedback-text" class="feedback-text">--</div>
-                    </div>
-
-                    <div class="feedback-item">
-                        <span class="feedback-label">WEAK LANGUAGE DETECTED</span>
-                        <div id="weak-words" class="feedback-text" style="color: var(--danger);">--</div>
-                    </div>
-
-                    <div class="feedback-item">
-                        <span class="feedback-label">EXECUTIVE REWRITE (BLUF)</span>
-                        <div id="rewrite-text" class="rewrite-box">--</div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="loader" class="hidden" style="text-align: center; padding-top: 50px;">
+            <div id="loader" class="hidden" style="text-align: center; padding: 50px;">
                 <div style="font-size: 3rem;">⚙️</div>
-                <p style="color: var(--gold);">Analyzing semantic density...</p>
+                <p>Consulting the CFO...</p>
             </div>
-            
-            <div id="placeholder-result" style="text-align: center; opacity: 0.5; padding-top: 50px;">
-                Waiting for input...
+
+            <div id="dashboard" class="hidden">
+                <div class="metric-grid">
+                    <div class="metric">
+                        <div class="metric-val" id="score">--</div>
+                        <div class="metric-label">Brevity</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-val" id="grade">--</div>
+                        <div class="metric-label">Impact</div>
+                    </div>
+                </div>
+                
+                <div class="feedback-box">
+                    <span class="feedback-label">RUTHLESS CRITIQUE</span>
+                    <div id="critique" style="color: var(--white);">--</div>
+                </div>
+                
+                <div class="feedback-box">
+                    <span class="feedback-label">BETTER VERSION (BLUF)</span>
+                    <div id="rewrite" class="rewrite">--</div>
+                </div>
             </div>
+
+            <div id="error-box" class="hidden error-msg"></div>
         </div>
     </main>
 
-    <div id="settings-modal" class="modal">
-        <div class="modal-content">
-            <h2 style="border:none;">Configuration</h2>
-            
-            <div class="form-group">
-                <label>Mode</label>
-                <select id="app-mode">
-                    <option value="demo">Demo Mode (Mock Data - No Key Needed)</option>
-                    <option value="live">Live API Mode</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>AI Model</label>
-                <select id="ai-model">
-                    <option value="gpt-4o-mini">OpenAI (GPT-4o-mini)</option>
-                    <option value="claude-3">Anthropic (Claude 3.5 Sonnet)</option>
-                </select>
-                <small style="color: var(--slate); font-size: 0.7rem;">*Claude requires a backend proxy for CORS. OpenAI works with Raw Fetch for demos.</small>
-            </div>
-
-            <div class="form-group">
-                <label>API Key</label>
-                <input type="password" id="api-key" placeholder="sk-...">
-            </div>
-
-            <div class="form-group">
-                <label>Custom Scenario (Optional)</label>
-                <textarea id="custom-scenario-input" rows="3" placeholder="Enter your specific difficult situation here..."></textarea>
-            </div>
-
-            <button class="header-controls" style="background: var(--gold); color: var(--navy); border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px;" onclick="saveSettings()">Save & Close</button>
-        </div>
-    </div>
-
     <script>
-        // --- Configuration ---
-        const CONFIG = {
-            mode: 'demo', // 'demo' or 'live'
-            model: 'gpt-4o-mini',
-            apiKey: '',
-            scenario: "The core database migration failed last night, causing a 4-hour outage for European customers. The CEO wants to know why and when it's fixed."
-        };
-
-        // --- Random Scenarios ---
-        const SCENARIOS = [
-            "Budget Overrun: The cloud infrastructure bill is 40% over forecast due to an unoptimized autoscaling group.",
-            "Missed Deadline: The Q3 mobile app release will be delayed by 3 weeks due to a critical security vulnerability found in audit.",
-            "Vendor Failure: Our primary payment gateway API is down, and we are losing $10k/minute in transaction volume.",
-            "Talent Risk: The Lead Architect just resigned to join a competitor, taking 50% of the project knowledge with them."
-        ];
-
-        // --- DOM Elements ---
-        const micBtn = document.getElementById('mic-btn');
-        const statusText = document.getElementById('status-text');
-        const transcriptEl = document.getElementById('transcript');
-        const dashboard = document.getElementById('dashboard');
-        const loader = document.getElementById('loader');
-        const placeholder = document.getElementById('placeholder-result');
-        const scenarioText = document.getElementById('scenario-text');
-
-        // --- Speech Recognition Setup ---
+        // --- State ---
         let recognition;
         let isRecording = false;
         let finalTranscript = "";
+        
+        // --- Elements ---
+        const btnRecord = document.getElementById('btn-record');
+        const btnAnalyze = document.getElementById('btn-analyze');
+        const statusBar = document.getElementById('status-bar');
+        const transcriptEl = document.getElementById('transcript');
+        const apiKeyInput = document.getElementById('api-key');
+        
+        // --- Initialization ---
+        if(localStorage.getItem('boardroom_api_key')) {
+            apiKeyInput.value = localStorage.getItem('boardroom_api_key');
+        }
 
         if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition();
             recognition.continuous = true;
             recognition.interimResults = true;
 
+            recognition.onstart = () => {
+                statusBar.innerText = "Listening...";
+                statusBar.style.color = "#ff5555";
+            };
+
             recognition.onresult = (event) => {
-                let interimTranscript = '';
+                let interim = "";
                 for (let i = event.resultIndex; i < event.results.length; ++i) {
                     if (event.results[i].isFinal) {
-                        finalTranscript += event.results[i][0].transcript;
+                        finalTranscript += event.results[i][0].transcript + " ";
                     } else {
-                        interimTranscript += event.results[i][0].transcript;
+                        interim += event.results[i][0].transcript;
                     }
                 }
-                transcriptEl.innerHTML = finalTranscript + '<i style="color: #8892b0;">' + interimTranscript + '</i>';
+                transcriptEl.innerHTML = `<span style="color:white">${finalTranscript}</span><span style="color:#666">${interim}</span>`;
             };
 
-            recognition.onerror = (event) => {
-                statusText.innerText = "Error: " + event.error;
+            recognition.onerror = (e) => {
+                statusBar.innerText = "Mic Error: " + e.error;
+                stopMicUI();
             };
         } else {
-            transcriptEl.innerHTML = "⚠️ Browser not supported. Please use Chrome or Edge.";
+            transcriptEl.innerText = "ERROR: Browser not supported. Use Chrome Desktop.";
+            btnRecord.disabled = true;
         }
 
-        // --- Core Functions ---
+        // --- Functions ---
 
-        function init() {
-            generateCrisis();
+        function saveKey() {
+            localStorage.setItem('boardroom_api_key', apiKeyInput.value);
+            statusBar.innerText = "API Key Saved.";
+            statusBar.style.color = "#64ffda";
         }
 
-        function generateCrisis() {
-            const random = SCENARIOS[Math.floor(Math.random() * SCENARIOS.length)];
-            CONFIG.scenario = random;
-            scenarioText.innerText = random;
-        }
-
-        function editScenario() {
-            const custom = prompt("Enter your custom scenario:", CONFIG.scenario);
-            if(custom) {
-                CONFIG.scenario = custom;
-                scenarioText.innerText = custom;
-            }
-        }
-
-        function openSettings() {
-            document.getElementById('settings-modal').style.display = 'flex';
-        }
-
-        function saveSettings() {
-            CONFIG.mode = document.getElementById('app-mode').value;
-            CONFIG.model = document.getElementById('ai-model').value;
-            CONFIG.apiKey = document.getElementById('api-key').value;
-            
-            const customInput = document.getElementById('custom-scenario-input').value;
-            if(customInput.trim() !== "") {
-                CONFIG.scenario = customInput;
-                scenarioText.innerText = customInput;
-            }
-
-            document.getElementById('settings-modal').style.display = 'none';
-            alert(`Settings Saved! Mode: ${CONFIG.mode.toUpperCase()}`);
-        }
-
-        function toggleRecording() {
-            if (!recognition) return alert("Speech API not supported in this browser.");
-
-            if (isRecording) {
-                // STOP
-                recognition.stop();
-                isRecording = false;
-                micBtn.classList.remove('recording');
-                statusText.innerText = "Processing...";
-                analyzePitch(finalTranscript);
-            } else {
-                // START
-                finalTranscript = "";
+        function toggleMic() {
+            if(!isRecording) {
+                // Start
+                finalTranscript = ""; 
                 transcriptEl.innerHTML = "";
                 recognition.start();
                 isRecording = true;
-                micBtn.classList.add('recording');
-                statusText.innerText = "Listening (Speak clearly)...";
                 
-                // Dashboard Reset
-                dashboard.classList.add('hidden');
-                placeholder.classList.remove('hidden');
-            }
-        }
-
-        // --- The Brain: Analysis Logic ---
-        
-        async function analyzePitch(text) {
-            // UI State
-            placeholder.classList.add('hidden');
-            loader.classList.remove('hidden');
-
-            // Payload Construction
-            let resultData = null;
-
-            if (CONFIG.mode === 'demo') {
-                // SIMULATED DELAY FOR EFFECT
-                await new Promise(r => setTimeout(r, 2000));
-                resultData = getMockData();
+                btnRecord.innerText = "■ STOP RECORDING";
+                btnRecord.classList.add('recording');
+                
+                btnAnalyze.disabled = false;
+                btnAnalyze.classList.add('ready');
             } else {
-                // LIVE API CALL
-                try {
-                    if(CONFIG.model === 'gpt-4o-mini') {
-                        resultData = await callOpenAI(text);
-                    } else {
-                        alert("Note: Calling Anthropic directly from browser usually fails due to CORS. Using Mock Data for safety.");
-                        await new Promise(r => setTimeout(r, 1500));
-                        resultData = getMockData(); // Fallback for stability
-                    }
-                } catch (e) {
-                    alert("API Error: " + e.message + ". Reverting to demo data.");
-                    resultData = getMockData();
-                }
+                // Stop (Pause)
+                recognition.stop();
+                stopMicUI();
             }
-
-            renderDashboard(resultData);
         }
 
-        // --- API Integrations ---
+        function stopMicUI() {
+            isRecording = false;
+            btnRecord.innerText = "● RE-RECORD";
+            btnRecord.classList.remove('recording');
+            statusBar.innerText = "Recording paused. Press Analyze when ready.";
+            statusBar.style.color = "var(--white)";
+        }
 
-        async function callOpenAI(transcript) {
-            if (!CONFIG.apiKey) throw new Error("No API Key provided");
+        function newScenario() {
+            const scenarios = [
+                "The mobile app login is down for iOS users.",
+                "We need to hire 5 more engineers but have 0 budget.",
+                "The project is delayed by 2 months due to technical debt."
+            ];
+            document.getElementById('scenario-text').innerText = scenarios[Math.floor(Math.random() * scenarios.length)];
+        }
 
-            const systemPrompt = `
-                You are a ruthless Fortune 500 CFO. Analyze the following executive update. 
-                Return strictly VALID JSON. 
-                Scenario Context: "${CONFIG.scenario}"
-                
-                JSON Structure:
-                {
-                    "brevity_score": (integer 0-100),
-                    "grade": (String "A", "B", "C", "D", "F"),
-                    "feedback": (String, ruthless one sentence critique),
-                    "weak_words": (String, comma separated list of hedging words used),
-                    "rewrite": (String, the perfect BLUF version)
+        async function analyze() {
+            // UI Reset
+            if(isRecording) recognition.stop();
+            stopMicUI();
+            
+            const key = apiKeyInput.value;
+            const text = transcriptEl.innerText;
+            
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('error-box').classList.add('hidden');
+            document.getElementById('loader').classList.remove('hidden');
+            statusBar.innerText = "Sending to OpenAI...";
+
+            // Validation
+            if(!text || text.length < 5) {
+                showError("Transcript too short. Please speak more.");
+                return;
+            }
+
+            try {
+                // MODE SELECTION: If Key exists, use Live. If not, use Demo.
+                let data;
+                if(key && key.startsWith('sk-')) {
+                    data = await callOpenAI(text, key);
+                } else {
+                    console.log("No Key detected, using Mock Data");
+                    await new Promise(r => setTimeout(r, 1500)); // Fake delay
+                    data = getMockData();
                 }
-            `;
+                
+                renderDashboard(data);
+                statusBar.innerText = "Analysis Complete.";
 
+            } catch (err) {
+                showError(err.message);
+            }
+        }
+
+        async function callOpenAI(text, key) {
             const response = await fetch('https://api.openai.com/v1/chat/completions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${CONFIG.apiKey}`
+                    'Authorization': `Bearer ${key}`
                 },
                 body: JSON.stringify({
                     model: "gpt-4o-mini",
                     messages: [
-                        {role: "system", content: systemPrompt},
-                        {role: "user", content: transcript}
+                        {role: "system", content: "You are a ruthless CFO. Output JSON: {brevity_score: number, grade: string, feedback: string, rewrite: string}. Grade harshly."},
+                        {role: "user", content: `Context: ${document.getElementById('scenario-text').innerText}. Transcript: ${text}`}
                     ],
                     response_format: { type: "json_object" }
                 })
             });
 
-            const data = await response.json();
-            return JSON.parse(data.choices[0].message.content);
+            if(!response.ok) {
+                const errData = await response.json();
+                throw new Error("OpenAI Error: " + (errData.error?.message || response.statusText));
+            }
+
+            const json = await response.json();
+            return JSON.parse(json.choices[0].message.content);
         }
 
         function getMockData() {
-            // Hardcoded "Wow" response for the portfolio demo
             return {
-                brevity_score: 42,
-                grade: "D+",
-                feedback: "You buried the lead. I don't care about the process, I care about the timeline impact.",
-                weak_words: "basically, i think, um, hopefully, try",
-                rewrite: "The project is delayed by 3 weeks due to security findings. We have deployed a fix and will be back on track by Monday."
+                brevity_score: 65,
+                grade: "C-",
+                feedback: "DEMO MODE: You used too many filler words. Enter an API Key for real analysis.",
+                rewrite: "Project is delayed. Mitigation plan attached. (Demo Output)"
             };
         }
 
-        // --- Rendering ---
-
         function renderDashboard(data) {
-            loader.classList.add('hidden');
-            dashboard.classList.remove('hidden');
-
-            // Animate Numbers
-            document.getElementById('score-val').innerText = data.brevity_score;
+            document.getElementById('loader').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
             
-            const gradeEl = document.getElementById('grade-val');
-            gradeEl.innerText = data.grade;
-            gradeEl.className = `metric-val grade-${data.grade.toLowerCase().charAt(0)}`;
-
-            document.getElementById('feedback-text').innerText = data.feedback;
-            document.getElementById('weak-words').innerText = data.weak_words;
-            document.getElementById('rewrite-text').innerText = data.rewrite;
+            document.getElementById('score').innerText = data.brevity_score;
+            document.getElementById('grade').innerText = data.grade;
+            document.getElementById('critique').innerText = data.feedback;
+            document.getElementById('rewrite').innerText = data.rewrite;
+            
+            // Color logic
+            const gradeEl = document.getElementById('grade');
+            if(data.grade.includes('A')) gradeEl.style.color = "var(--success)";
+            else if(data.grade.includes('F') || data.grade.includes('D')) gradeEl.style.color = "var(--danger)";
+            else gradeEl.style.color = "var(--gold)";
         }
 
-        // Start
-        init();
-
+        function showError(msg) {
+            document.getElementById('loader').classList.add('hidden');
+            const errBox = document.getElementById('error-box');
+            errBox.innerText = "⚠️ " + msg;
+            errBox.classList.remove('hidden');
+            statusBar.innerText = "Analysis Failed";
+            statusBar.style.color = "var(--danger)";
+        }
     </script>
 </body>
 </html>
